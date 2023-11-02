@@ -72,6 +72,15 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply flex flex-col gap-6 bg-background text-foreground;
+  }
+
+  html,
+  body {
+    @apply h-full;
+  }
+
+  body {
+    padding-bottom: max(env(safe-area-inset-bottom), 20px);
   }
 }

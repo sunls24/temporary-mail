@@ -1,12 +1,13 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import React from "react";
+import { Toaster } from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
-  title: "Temporary mail",
-  description: "Temporary mail",
+  title: "临时邮箱",
+  description: "临时邮箱",
   appleWebApp: {
-    title: "Temporary mail",
+    title: "临时邮箱",
   },
 };
 
@@ -25,7 +26,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="zh">
-      <body>{children}</body>
+      <body>
+        {children}
+        <Toaster />
+      </body>
     </html>
   );
 }

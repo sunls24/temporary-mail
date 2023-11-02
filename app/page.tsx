@@ -1,7 +1,11 @@
+import Header from "@/components/header";
+import Main from "@/components/main";
+
 export default function Home() {
   return (
-    <main className="flex h-20 items-center justify-center">
-      <h3 className="font-medium">Temporary mail</h3>
-    </main>
+    <>
+      <Header />
+      <Main />
+    </>
   );
 }
