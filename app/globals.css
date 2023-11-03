@@ -81,6 +81,6 @@
   }
 
   body {
-    padding-bottom: max(env(safe-area-inset-bottom), 20px);
+    padding-bottom: env(safe-area-inset-bottom);
   }
 }

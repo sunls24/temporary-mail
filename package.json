@@ -14,6 +14,7 @@
     "@radix-ui/react-toast": "^1.1.5",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
+    "imapflow": "^1.0.147",
     "lucide-react": "^0.291.0",
     "next": "^14.0.1",
     "react": "^18.2.0",
@@ -22,11 +23,12 @@
     "zustand": "^4.4.6"
   },
   "devDependencies": {
+    "@types/imapflow": "^1.0.15",
     "@types/node": "^20.8.10",
-    "@types/react": "^18.2.34",
+    "@types/react": "^18.2.35",
     "@types/react-dom": "^18.2.14",
     "autoprefixer": "^10.4.16",
-    "eslint": "^8.52.0",
+    "eslint": "^8.53.0",
     "eslint-config-next": "^14.0.1",
     "eslint-config-prettier": "^9.0.0",
     "postcss": "^8.4.31",
