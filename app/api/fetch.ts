@@ -32,10 +32,7 @@ async function run(fn: () => Promise<any>) {
     res = await fn();
   } catch (e: any) {
     console.log("Error:", e.message);
-    if (
-      e.message !== "Connection not available" &&
-      e.message !== "Authentication failed"
-    ) {
+    if (e.message !== "Connection not available") {
       throw e;
     }
     await newClient();
