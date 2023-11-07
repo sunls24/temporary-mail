@@ -1,3 +1,3 @@
 export const domainList = ["@sliu.eu.org"];
 
-export const refreshSeconds = 60;
+export const refreshSeconds = 10;

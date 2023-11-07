@@ -33,11 +33,20 @@ function Actions() {
     setMail(e.currentTarget.value.replace(/[^a-zA-Z0-9-_.]/g, ""));
   }
 
+  function onKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (e.key !== "Enter" || e.nativeEvent.isComposing) {
+      return;
+    }
+    e.preventDefault();
+    onSave();
+  }
+
   const [edited, setEdited] = useState(false);
   return (
     <div className="flex flex-wrap items-center gap-1">
       <Mounted fallback={<Skeleton className="h-8 w-28" />}>
         <Input
+          onKeyDown={onKeyDown}
           disabled={!edited}
           value={mail}
           className="w-28 text-end"
