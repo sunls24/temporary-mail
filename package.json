@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@radix-ui/react-dialog": "^1.0.5",
     "@radix-ui/react-select": "^2.0.0",
     "@radix-ui/react-slot": "^1.0.2",
     "@radix-ui/react-toast": "^1.1.5",
@@ -16,6 +17,7 @@
     "clsx": "^2.0.0",
     "imapflow": "^1.0.147",
     "lucide-react": "^0.291.0",
+    "mailparser": "^3.6.5",
     "next": "^14.0.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -23,7 +25,8 @@
     "zustand": "^4.4.6"
   },
   "devDependencies": {
-    "@types/imapflow": "^1.0.15",
+    "@types/imapflow": "^1.0.16",
+    "@types/mailparser": "^3.4.4",
     "@types/node": "^20.8.10",
     "@types/react": "^18.2.36",
     "@types/react-dom": "^18.2.14",

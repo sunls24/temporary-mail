@@ -83,4 +83,14 @@
   body {
     padding-bottom: env(safe-area-inset-bottom);
   }
+
+  ::-webkit-scrollbar {
+    --bar-width: 5px;
+    width: var(--bar-width);
+    height: var(--bar-width);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply rounded-md bg-border;
+  }
 }

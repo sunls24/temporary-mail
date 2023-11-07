@@ -32,7 +32,10 @@ async function run(fn: () => Promise<any>) {
     res = await fn();
   } catch (e: any) {
     console.log("Error:", e.message);
-    if (e.message !== "Connection not available") {
+    if (
+      e.message !== "Connection not available" &&
+      e.message !== "Authentication failed"
+    ) {
       throw e;
     }
     await newClient();
@@ -47,6 +50,7 @@ export async function fetchLast(search: SearchObject) {
     const mailList: Envelope[] = [];
     for await (let msg of client.fetch(search, { envelope: true })) {
       mailList.push({
+        uid: msg.uid,
         date: msg.envelope.date,
         subject: msg.envelope.subject,
         from: msg.envelope.from[0],
@@ -54,4 +58,11 @@ export async function fetchLast(search: SearchObject) {
     }
     return mailList;
   });
+}
+
+export async function fetchOne(uid: string) {
+  console.log("fetchOne", uid);
+  return await run(
+    async () => await client.fetchOne(uid, { source: true }, { uid: true }),
+  );
 }

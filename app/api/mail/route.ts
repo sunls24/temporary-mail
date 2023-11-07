@@ -1,15 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
-import { fetchLast } from "@/app/api/mail/fetch";
+import { fetchLast } from "@/app/api/fetch";
 
 export async function GET(req: NextRequest) {
   try {
     const to = req.nextUrl.searchParams.get("to");
     if (!to) {
-      return new NextResponse("not set address");
+      return NextResponse.json({ error: "no email address" }, { status: 400 });
     }
     const mailList = await fetchLast({
       to,
-      // since: new Date(new Date().getTime() - 600000),
+      since: new Date(new Date().getTime() - 86400000),
     });
     return NextResponse.json(mailList);
   } catch (e: any) {
