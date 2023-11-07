@@ -28,6 +28,7 @@ function MailDetail({
   async function onOpenChange(open: boolean) {
     if (!open) {
       controller?.abort();
+      setHtml({ __html: "" });
       return;
     }
     try {
