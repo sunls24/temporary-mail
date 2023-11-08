@@ -20,7 +20,7 @@ async function newClient() {
   });
 
   await client.connect();
-  await client.mailboxOpen(process.env.IMAP_PATH ?? "TEMP", { readOnly: true });
+  await client.mailboxOpen(process.env.IMAP_PATH ?? "Junk", { readOnly: true });
 }
 
 async function run(fn: () => Promise<any>) {
