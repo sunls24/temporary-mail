@@ -1,12 +1,14 @@
 import React from "react";
-import { Github } from "lucide-react";
+import { Github, ShieldCheck } from "lucide-react";
 import { VERSION } from "@/lib/constant";
 
 function Header() {
   return (
     <header className="h-16 shrink-0 border-b shadow-sm">
-      <div className="mx-auto flex h-full w-[90%] max-w-4xl items-center justify-center gap-2 sm:justify-between">
-        <span className="font-medium">临时邮箱</span>
+      <div className="mx-auto flex h-full w-[90%] max-w-4xl items-center">
+        <ShieldCheck strokeWidth={1.8} />
+        <span className="ml-1 font-medium">临时邮箱</span>
+        <span className="flex-1" />
         <a
           href="https://github.com/sunls24/temporary-mail"
           target="_blank"
