@@ -9,6 +9,7 @@ import Mounted from "@/components/mounted";
 import { useConfig } from "@/lib/store/config";
 import { Skeleton } from "@/components/ui/skeleton";
 import { randomMail } from "@/lib/utils";
+import { emitter, mittKey } from "@/lib/mitt";
 
 function Actions() {
   const config = useConfig();
@@ -19,14 +20,18 @@ function Actions() {
     if (!mail) {
       return;
     }
-    config.update(mail, domain);
     setEdited(false);
+    if (config.mail != mail) {
+      config.update(mail, domain);
+      setTimeout(() => emitter.emit(mittKey.REFRESH));
+    }
   }
 
   function onRandom() {
     const random = randomMail();
     setMail(random);
     config.update(random, domain);
+    setTimeout(() => emitter.emit(mittKey.REFRESH));
   }
 
   function onMailChange(e: React.ChangeEvent<HTMLInputElement>) {

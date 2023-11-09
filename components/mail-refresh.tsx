@@ -6,14 +6,20 @@ import { refreshSeconds } from "@/lib/constant";
 import { useEnvelope } from "@/lib/store/envelope";
 import { useConfig } from "@/lib/store/config";
 import { useToast } from "@/components/ui/use-toast";
+import { emitter, mittKey } from "@/lib/mitt";
 
 function MailRefresh() {
   const [seconds, setSeconds] = useState(0);
   const [timer, setTimer] = useState<NodeJS.Timeout>();
   const [loading, setLoading] = useState(false);
   const setEnvelope = useEnvelope((state) => state.setEnvelope);
-  const config = useConfig();
+  const mailAddress = useConfig((state) => state.mail + state.domain);
   const { toast } = useToast();
+
+  useEffect(() => {
+    emitter.on(mittKey.REFRESH, onRefresh);
+    return () => emitter.off(mittKey.REFRESH, onRefresh);
+  }, [mailAddress]);
 
   useEffect(() => {
     const timerId = setTimeout(
@@ -39,9 +45,7 @@ function MailRefresh() {
     }
     setLoading(true);
     try {
-      const res = await (
-        await fetch(`/api/mail?to=${config.mail}${config.domain}`)
-      ).json();
+      const res = await (await fetch(`/api/mail?to=${mailAddress}`)).json();
       if (res.error) {
         throw new Error(res.error);
       }
