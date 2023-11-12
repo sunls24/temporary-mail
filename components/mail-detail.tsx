@@ -67,7 +67,7 @@ function MailDetail({
         </DialogHeader>
         <div
           dangerouslySetInnerHTML={html}
-          className="max-h-[70vh] min-h-[108px] overflow-auto border-t pt-2"
+          className="max-h-[70vh] min-h-[108px] overflow-auto border-t pt-4"
         />
       </DialogContent>
     </Dialog>
