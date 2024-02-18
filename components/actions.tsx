@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { CheckCircle, Edit, Shuffle } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -16,12 +16,17 @@ function Actions() {
   const [mail, setMail] = useState(config.mail);
   const [domain, setDomain] = useState(config.domain);
 
+  useEffect(() => {
+    mail !== config.mail && setMail(config.mail);
+    domain !== config.domain && setDomain(config.domain);
+  }, [config]);
+
   function onSave() {
-    if (!mail) {
+    if (!mail || !domain) {
       return;
     }
     setEdited(false);
-    if (config.mail != mail) {
+    if (config.mail != mail || config.domain != domain) {
       config.update(mail, domain);
       setTimeout(() => emitter.emit(mittKey.REFRESH));
     }
