@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { CheckCircle, Edit, Shuffle } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import SelectWrap from "@/components/select-wrap";
-import { domainList } from "@/lib/constant";
+import { DOMAIN_LIST } from "@/lib/constant";
 import Mounted from "@/components/mounted";
 import { useConfig } from "@/lib/store/config";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -67,7 +67,7 @@ function Actions() {
         <SelectWrap
           value={domain}
           setValue={(domain) => setDomain(domain)}
-          list={domainList}
+          list={DOMAIN_LIST}
           disabled={!edited}
         />
       </Mounted>

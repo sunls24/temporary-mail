@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { RefreshCw } from "lucide-react";
-import { refreshSeconds } from "@/lib/constant";
+import { REFRESH_SECONDS } from "@/lib/constant";
 import { useEnvelope } from "@/lib/store/envelope";
 import { useConfig } from "@/lib/store/config";
 import { useToast } from "@/components/ui/use-toast";
@@ -24,8 +24,8 @@ function MailRefresh() {
   useEffect(() => {
     const timerId = setTimeout(
       async () => {
-        if (seconds >= refreshSeconds - 1 || !timer) {
-          await onRefresh();
+        if (seconds >= REFRESH_SECONDS - 1 || !timer) {
+          emitter.emit(mittKey.REFRESH);
           return;
         }
         setSeconds(seconds + 1);
@@ -70,7 +70,7 @@ function MailRefresh() {
       )}
       <span className="self-end pb-0.5 text-sm text-muted-foreground">
         将在
-        <span className="font-medium">{refreshSeconds - seconds}s</span>
+        <span className="font-medium">{REFRESH_SECONDS - seconds}s</span>
         后自动刷新
       </span>
     </>
