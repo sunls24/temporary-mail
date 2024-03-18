@@ -10,6 +10,7 @@ import { useConfig } from "@/lib/store/config";
 import { Skeleton } from "@/components/ui/skeleton";
 import { randomMail } from "@/lib/utils";
 import { emitter, mittKey } from "@/lib/mitt";
+import { toast } from "sonner";
 
 function Actions() {
   const config = useConfig();
@@ -28,6 +29,7 @@ function Actions() {
     setEdited(false);
     if (config.mail != mail || config.domain != domain) {
       config.update(mail, domain);
+      toast.success("已修改至新地址 " + mail + domain);
       setTimeout(() => emitter.emit(mittKey.REFRESH));
     }
   }
@@ -37,10 +39,15 @@ function Actions() {
     setMail(random);
     config.update(random, domain);
     setTimeout(() => emitter.emit(mittKey.REFRESH));
+    toast.success("已随机至新地址 " + random + domain);
   }
 
   function onMailChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setMail(e.currentTarget.value.replace(/[^a-zA-Z0-9-_.]/g, ""));
+    const value = e.currentTarget.value.replace(/[^a-zA-Z0-9-_.]/g, "");
+    if (value.length > 64) {
+      return;
+    }
+    setMail(value);
   }
 
   function onKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {

@@ -5,20 +5,20 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { ClipboardCopy } from "lucide-react";
 import { useConfig } from "@/lib/store/config";
-import { useToast } from "@/components/ui/use-toast";
+import { toast } from "sonner";
 
 function MailTitle() {
   const config = useConfig();
-  const { toast } = useToast();
 
   function onCopy() {
     navigator.clipboard
       .writeText(config.mail + config.domain)
-      .then(() => toast({ description: "已拷贝至剪切板" }))
-      .catch((e) =>
-        toast({ variant: "destructive", description: `出错啦: ${e.message}` }),
-      );
+      .then(() =>
+        toast.success("已拷贝至剪切板 " + config.mail + config.domain),
+      )
+      .catch((e) => toast.error(`出错啦: ${e.message}`));
   }
+
   return (
     <div className="flex items-center gap-1">
       <Mounted fallback={<Skeleton className="h-7 w-40" />}>

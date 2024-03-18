@@ -1,7 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import React from "react";
-import { Toaster } from "@/components/ui/toaster";
+import { Toaster } from "@/components/ui/sonner";
+import { Analytics } from "@vercel/analytics/react";
 
 export const metadata: Metadata = {
   title: "临时邮箱 - 匿名的一次性邮箱",
@@ -37,7 +38,8 @@ export default function RootLayout({
     <html lang="zh">
       <body>
         {children}
-        <Toaster />
+        <Toaster richColors position="top-right" />
+        {process.env.VERCEL && <Analytics />}
       </body>
     </html>
   );

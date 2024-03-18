@@ -5,8 +5,8 @@ import { RefreshCw } from "lucide-react";
 import { REFRESH_SECONDS } from "@/lib/constant";
 import { useEnvelope } from "@/lib/store/envelope";
 import { useConfig } from "@/lib/store/config";
-import { useToast } from "@/components/ui/use-toast";
 import { emitter, mittKey } from "@/lib/mitt";
+import { toast } from "sonner";
 
 function MailRefresh() {
   const [seconds, setSeconds] = useState(0);
@@ -14,7 +14,6 @@ function MailRefresh() {
   const [loading, setLoading] = useState(false);
   const setEnvelope = useEnvelope((state) => state.setEnvelope);
   const mailAddress = useConfig((state) => state.mail + state.domain);
-  const { toast } = useToast();
 
   useEffect(() => {
     emitter.on(mittKey.REFRESH, onRefresh);
@@ -51,7 +50,7 @@ function MailRefresh() {
       }
       setEnvelope(res);
     } catch (e: any) {
-      toast({ description: e.message, variant: "destructive" });
+      toast.error(e.message);
     } finally {
       setSeconds((seconds) => (seconds === 0 ? 1 : 0));
       setLoading(false);
