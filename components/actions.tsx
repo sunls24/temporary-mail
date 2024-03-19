@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { CheckCircle, Edit, Shuffle } from "lucide-react";
+import { CheckCircle, History, PenLine, Shuffle } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import SelectWrap from "@/components/select-wrap";
 import { DOMAIN_LIST } from "@/lib/constant";
@@ -11,6 +11,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { randomMail } from "@/lib/utils";
 import { emitter, mittKey } from "@/lib/mitt";
 import { toast } from "sonner";
+import MailHistory from "@/components/mail-history";
 
 function Actions() {
   const config = useConfig();
@@ -36,10 +37,15 @@ function Actions() {
 
   function onRandom() {
     const random = randomMail();
-    setMail(random);
     config.update(random, domain);
     setTimeout(() => emitter.emit(mittKey.REFRESH));
     toast.success("已随机至新地址 " + random + domain);
+  }
+
+  function onChange(mail: string, domain: string) {
+    config.update(mail, domain);
+    setTimeout(() => emitter.emit(mittKey.REFRESH));
+    toast.success("已切换至新地址 " + mail + domain);
   }
 
   function onMailChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -60,40 +66,50 @@ function Actions() {
 
   const [edited, setEdited] = useState(false);
   return (
-    <div className="flex flex-wrap items-center gap-1">
-      <Mounted fallback={<Skeleton className="h-8 w-28" />}>
-        <Input
-          onKeyDown={onKeyDown}
-          disabled={!edited}
-          value={mail}
-          className="w-28 text-end"
-          onChange={onMailChange}
-        />
-      </Mounted>
-      <Mounted fallback={<Skeleton className="h-8 w-28" />}>
-        <SelectWrap
-          value={domain}
-          setValue={(domain) => setDomain(domain)}
-          list={DOMAIN_LIST}
-          disabled={!edited}
-        />
-      </Mounted>
-
-      <div className="ml-1">
-        {!edited && (
-          <Button variant="ghost" size="icon" onClick={() => setEdited(true)}>
-            <Edit size={20} strokeWidth={1.8} />
-          </Button>
-        )}
-        {edited && (
-          <Button variant="ghost" size="icon" onClick={onSave}>
-            <CheckCircle size={20} strokeWidth={1.8} />
-          </Button>
-        )}
-        <Button variant="ghost" size="icon" onClick={onRandom}>
-          <Shuffle size={20} strokeWidth={1.8} />
-        </Button>
+    <div className="flex flex-wrap items-center gap-2">
+      <div className="flex h-9 items-center gap-1">
+        <Mounted fallback={<Skeleton className="h-8 w-28" />}>
+          <Input
+            onKeyDown={onKeyDown}
+            disabled={!edited}
+            value={mail}
+            className="w-28 text-end"
+            onChange={onMailChange}
+          />
+        </Mounted>
+        <Mounted fallback={<Skeleton className="h-8 w-[118px]" />}>
+          <SelectWrap
+            value={domain}
+            setValue={(domain) => setDomain(domain)}
+            list={DOMAIN_LIST}
+            disabled={!edited}
+            className="w-[118px] px-2"
+          />
+        </Mounted>
       </div>
+
+      {!edited && (
+        <Button variant="outline" size="sm" onClick={() => setEdited(true)}>
+          <PenLine size={14} className="mr-1" />
+          编辑
+        </Button>
+      )}
+      {edited && (
+        <Button variant="outline" size="sm" onClick={onSave}>
+          <CheckCircle size={14} className="mr-1" />
+          保存
+        </Button>
+      )}
+      <Button variant="outline" size="sm" onClick={onRandom}>
+        <Shuffle size={14} className="mr-1" />
+        随机
+      </Button>
+      <MailHistory onChange={onChange}>
+        <Button variant="outline" size="sm">
+          <History size={14} className="mr-1" />
+          历史
+        </Button>
+      </MailHistory>
     </div>
   );
 }

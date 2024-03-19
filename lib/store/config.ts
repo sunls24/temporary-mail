@@ -6,17 +6,39 @@ import { DOMAIN_LIST } from "@/lib/constant";
 interface Config {
   mail: string;
   domain: string;
+  history: string[];
 
   update(mail: string, domain: string): void;
+  clearHistory(index?: number): void;
 }
 
 export const useConfig = create<Config>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       mail: randomMail(),
       domain: DOMAIN_LIST[0],
+      history: [],
       update(mail: string, domain: string) {
-        set({ mail, domain });
+        const history = get().history;
+        const old = get().mail + get().domain;
+        const index = history.indexOf(old);
+        if (index >= 0) {
+          history.splice(index, 1);
+        }
+        history.unshift(old);
+        set({ mail, domain, history });
+      },
+      clearHistory(index?: number) {
+        if (index === undefined) {
+          set({ history: [] });
+          return;
+        }
+        const history = get().history;
+        if (index >= history.length) {
+          return;
+        }
+        history.splice(index, 1);
+        set({ history });
       },
     }),
     {

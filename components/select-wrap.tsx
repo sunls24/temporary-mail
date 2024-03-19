@@ -6,21 +6,24 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { cn } from "@/lib/utils";
 
 function SelectWrap({
   value,
   setValue,
   list,
   disabled,
+  className,
 }: {
   value: string;
   setValue: (v: string) => void;
   list: string[];
   disabled?: boolean;
+  className?: string;
 }) {
   return (
     <Select disabled={disabled} value={value} onValueChange={setValue}>
-      <SelectTrigger className="w-fit gap-1">
+      <SelectTrigger className={cn("w-fit gap-1", className)}>
         <SelectValue />
       </SelectTrigger>
       <SelectContent>

@@ -1,0 +1,89 @@
+import React, { useState } from "react";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { useConfig } from "@/lib/store/config";
+import { Button } from "@/components/ui/button";
+import { Eraser, MailQuestion, Trash } from "lucide-react";
+import { toast } from "sonner";
+
+function MailHistory({
+  onChange,
+  children,
+}: {
+  onChange: (mail: string, domain: string) => void;
+  children: React.ReactNode;
+}) {
+  const [history, clearHistory] = useConfig((state) => [
+    state.history,
+    state.clearHistory,
+  ]);
+
+  function onChangeClick(value: string, index: number) {
+    setOpen(false);
+    setTimeout(() => {
+      clearHistory(index);
+      const atIndex = value.indexOf("@");
+      onChange(value.substring(0, atIndex), value.substring(atIndex));
+    }, 100);
+  }
+
+  const [open, setOpen] = useState(false);
+
+  return (
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>{children}</PopoverTrigger>
+      <PopoverContent className="w-fit overflow-hidden p-0">
+        {history.length === 0 ? (
+          <div className="flex items-center gap-1 p-3 text-sm text-muted-foreground">
+            <MailQuestion size={18} strokeWidth={1.8} />
+            这里什么也没有
+          </div>
+        ) : (
+          <>
+            <div className="flex max-h-96 flex-col divide-y divide-dashed overflow-auto border-b">
+              {history.map((value, index) => (
+                <div
+                  key={index}
+                  className="flex items-center gap-1 px-4 py-2 text-muted-foreground hover:bg-secondary hover:text-foreground"
+                >
+                  <div
+                    className="cursor-pointer"
+                    onClick={() => onChangeClick(value, index)}
+                  >
+                    {value}
+                  </div>
+                  <div className="flex-1" />
+                  <Trash
+                    size={16}
+                    onClick={() => clearHistory(index)}
+                    className="cursor-pointer hover:text-destructive"
+                  />
+                </div>
+              ))}
+            </div>
+            <div className="flex bg-secondary p-2">
+              <div className="flex-1" />
+              <Button
+                variant="destructive"
+                size="sm"
+                onClick={() => {
+                  setOpen(false);
+                  setTimeout(clearHistory, 100);
+                  toast.success("已清空所有历史纪录");
+                }}
+              >
+                <Eraser size={14} className="mr-1" />
+                清空历史
+              </Button>
+            </div>
+          </>
+        )}
+      </PopoverContent>
+    </Popover>
+  );
+}
+
+export default MailHistory;
