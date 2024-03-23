@@ -90,23 +90,23 @@ function Actions() {
 
       {!edited && (
         <Button variant="outline" onClick={() => setEdited(true)}>
-          <PenLine size={14} className="mr-1" />
+          <PenLine size={16} className="mr-1" />
           编辑
         </Button>
       )}
       {edited && (
         <Button variant="outline" onClick={onSave}>
-          <CheckCircle size={14} className="mr-1" />
+          <CheckCircle size={16} className="mr-1" />
           保存
         </Button>
       )}
       <Button variant="outline" onClick={onRandom}>
-        <Shuffle size={14} className="mr-1" />
+        <Shuffle size={16} className="mr-1" />
         随机
       </Button>
       <MailHistory onChange={onChange}>
         <Button variant="outline">
-          <History size={14} className="mr-1" />
+          <History size={16} className="mr-1" />
           历史
         </Button>
       </MailHistory>

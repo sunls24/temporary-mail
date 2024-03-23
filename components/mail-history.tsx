@@ -35,7 +35,7 @@ function MailHistory({
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>{children}</PopoverTrigger>
-      <PopoverContent className="w-fit overflow-hidden p-0">
+      <PopoverContent className="w-fit p-0">
         {history.length === 0 ? (
           <div className="flex items-center gap-1 p-3 text-sm text-muted-foreground">
             <MailQuestion size={18} strokeWidth={1.8} />
@@ -43,24 +43,26 @@ function MailHistory({
           </div>
         ) : (
           <>
-            <div className="flex max-h-96 flex-col divide-y divide-dashed overflow-auto border-b">
+            <div className="flex max-h-96 flex-col overflow-auto border-b p-2">
               {history.map((value, index) => (
-                <div
-                  key={index}
-                  className="flex items-center gap-1 px-4 py-2 text-muted-foreground hover:bg-secondary hover:text-foreground"
-                >
-                  <div
-                    className="cursor-pointer"
-                    onClick={() => onChangeClick(value, index)}
-                  >
-                    {value}
+                <div key={index}>
+                  <div className="flex items-center gap-1 rounded-md px-2 py-1.5 text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground">
+                    <div
+                      className="cursor-pointer"
+                      onClick={() => onChangeClick(value, index)}
+                    >
+                      {value}
+                    </div>
+                    <div className="flex-1" />
+                    <Trash
+                      size={16}
+                      onClick={() => clearHistory(index)}
+                      className="cursor-pointer hover:text-destructive"
+                    />
                   </div>
-                  <div className="flex-1" />
-                  <Trash
-                    size={16}
-                    onClick={() => clearHistory(index)}
-                    className="cursor-pointer hover:text-destructive"
-                  />
+                  {index < history.length - 1 && (
+                    <div className="mx-auto my-1 h-[1px] w-[95%] bg-border" />
+                  )}
                 </div>
               ))}
             </div>
