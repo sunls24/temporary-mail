@@ -5,7 +5,7 @@ import MailList from "@/components/mail-list";
 
 function Mail() {
   return (
-    <div className="mb-3 flex h-0 flex-1 flex-col rounded-md border shadow">
+    <div className="flex h-0 flex-1 flex-col rounded-md border shadow">
       <div className="border-b p-3">
         <div className="flex flex-wrap items-center gap-2">
           <MailTitle />

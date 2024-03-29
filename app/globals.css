@@ -72,7 +72,7 @@
   }
 
   body {
-    @apply flex flex-col gap-6 bg-background text-foreground;
+    @apply flex flex-col bg-background text-foreground;
   }
 
   html,

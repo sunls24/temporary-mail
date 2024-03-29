@@ -2,25 +2,36 @@ import { ImapFlow, SearchObject } from "imapflow";
 import { Envelope } from "@/lib/types";
 
 let client: ImapFlow;
+let connecting: Promise<void> | undefined;
 
 async function newClient() {
-  console.log("newClient...");
-  if (client) {
-    client.close();
-  }
-  client = new ImapFlow({
-    host: process.env.IMAP_HOST ?? "outlook.office365.com",
-    port: parseInt(process.env.IMAP_PORT ?? "993"),
-    secure: JSON.parse((process.env.IMAP_SECURE ?? "true").toLowerCase()),
-    auth: {
-      user: process.env.IMAP_USER ?? "",
-      pass: process.env.IMAP_PASS ?? "",
-    },
-    logger: false,
-  });
+  if (!connecting) {
+    connecting = new Promise<void>(async (resolve, reject) => {
+      console.log("newClient...");
+      if (client) {
+        client.close();
+      }
+      client = new ImapFlow({
+        host: process.env.IMAP_HOST ?? "outlook.office365.com",
+        port: parseInt(process.env.IMAP_PORT ?? "993"),
+        secure: JSON.parse((process.env.IMAP_SECURE ?? "true").toLowerCase()),
+        auth: {
+          user: process.env.IMAP_USER ?? "",
+          pass: process.env.IMAP_PASS ?? "",
+        },
+        logger: false,
+      });
 
-  await client.connect();
-  await client.mailboxOpen(process.env.IMAP_PATH ?? "Junk", { readOnly: true });
+      await client.connect();
+      await client.mailboxOpen(process.env.IMAP_PATH ?? "Junk", {
+        readOnly: true,
+      });
+      resolve();
+    }).finally(() => {
+      connecting = undefined;
+    });
+  }
+  await connecting;
 }
 
 async function run(fn: () => Promise<any>) {
@@ -54,6 +65,26 @@ export async function fetchLast(search: SearchObject) {
       });
     }
     return mailList;
+  });
+}
+
+const DAY10 = 864000000;
+const HOUR24 = 86400000;
+
+export async function fetchLast10Day() {
+  const now = new Date().getTime();
+  return await run(async () => {
+    const data = { day10: 0, hour24: 0 };
+    for await (let msg of client.fetch(
+      { since: new Date(now - DAY10) },
+      { internalDate: true },
+    )) {
+      data.day10++;
+      if (now - msg.internalDate.getTime() <= HOUR24) {
+        data.hour24++;
+      }
+    }
+    return data;
   });
 }
 
