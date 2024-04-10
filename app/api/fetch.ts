@@ -76,7 +76,7 @@ export async function fetchLast10Day() {
   return await run(async () => {
     const data = { day10: 0, hour24: 0 };
     for await (let msg of client.fetch(
-      { since: new Date(now - DAY10) },
+      { since: new Date(now - DAY10), to: ".eu.org" },
       { internalDate: true },
     )) {
       data.day10++;
