@@ -11,7 +11,7 @@ async function newClient() {
       if (client) {
         client.close();
       }
-      client = new ImapFlow({
+      const newClient = new ImapFlow({
         host: process.env.IMAP_HOST ?? "outlook.office365.com",
         port: parseInt(process.env.IMAP_PORT ?? "993"),
         secure: JSON.parse((process.env.IMAP_SECURE ?? "true").toLowerCase()),
@@ -22,10 +22,11 @@ async function newClient() {
         logger: false,
       });
 
-      await client.connect();
-      await client.mailboxOpen(process.env.IMAP_PATH ?? "Junk", {
+      await newClient.connect();
+      await newClient.mailboxOpen(process.env.IMAP_PATH ?? "Junk", {
         readOnly: true,
       });
+      client = newClient;
       resolve();
     }).finally(() => {
       connecting = undefined;
@@ -76,7 +77,7 @@ export async function fetchLast10Day() {
   return await run(async () => {
     const data = { day10: 0, hour24: 0 };
     for await (let msg of client.fetch(
-      { since: new Date(now - DAY10), to: ".eu.org" },
+      { since: new Date(now - DAY10), to: "*.eu.org" },
       { internalDate: true },
     )) {
       data.day10++;

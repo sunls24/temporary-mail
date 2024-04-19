@@ -11,7 +11,7 @@ function Footer() {
     fetch("/api/count", { signal: controller.signal }).then(async (res) => {
       setData(await res.json());
     });
-    return () => controller.abort();
+    return () => controller.abort("unload");
   }, []);
 
   return (
