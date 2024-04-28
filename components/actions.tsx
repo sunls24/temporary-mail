@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { CheckCircle, History, PenLine, Shuffle } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import SelectWrap from "@/components/select-wrap";
-import { DOMAIN_LIST } from "@/lib/constant";
 import Mounted from "@/components/mounted";
 import { useConfig } from "@/lib/store/config";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -12,8 +11,11 @@ import { randomMail } from "@/lib/utils";
 import { emitter, mittKey } from "@/lib/mitt";
 import { toast } from "sonner";
 import MailHistory from "@/components/mail-history";
+import { useStoreWithEqualityFn } from "zustand/traditional";
+import { configServerStore } from "@/lib/store/config-server";
 
 function Actions() {
+  const configServer = useStoreWithEqualityFn(configServerStore);
   const config = useConfig();
   const [mail, setMail] = useState(config.mail);
   const [domain, setDomain] = useState(config.domain);
@@ -22,6 +24,14 @@ function Actions() {
     mail !== config.mail && setMail(config.mail);
     domain !== config.domain && setDomain(config.domain);
   }, [config]);
+
+  useEffect(() => {
+    if (config.domain || !configServer.domain[0]) {
+      return;
+    }
+    console.log("-> set default domain:", configServer.domain[0]);
+    config.update(config.mail, configServer.domain[0]);
+  }, [configServer.domain]);
 
   function onSave() {
     if (!mail || !domain) {
@@ -81,7 +91,7 @@ function Actions() {
           <SelectWrap
             value={domain}
             setValue={(domain) => setDomain(domain)}
-            list={DOMAIN_LIST}
+            list={configServer.domain}
             disabled={!edited}
             className="w-[118px] px-2"
           />

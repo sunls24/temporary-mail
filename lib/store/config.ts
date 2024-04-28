@@ -1,7 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { randomMail } from "@/lib/utils";
-import { DOMAIN_LIST } from "@/lib/constant";
 
 interface Config {
   mail: string;
@@ -16,7 +15,7 @@ export const useConfig = create<Config>()(
   persist(
     (set, get) => ({
       mail: randomMail(),
-      domain: DOMAIN_LIST[0],
+      domain: "",
       history: [],
       update(mail: string, domain: string) {
         const history = get().history;

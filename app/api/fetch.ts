@@ -1,5 +1,6 @@
 import { ImapFlow, SearchObject } from "imapflow";
 import { Envelope } from "@/lib/types";
+import { DOMAIN_LIST_SERVER } from "@/lib/constant";
 
 let client: ImapFlow;
 let connecting: Promise<void> | undefined;
@@ -80,13 +81,15 @@ export async function fetchLast10Day() {
   const now = new Date().getTime();
   return await run(async () => {
     const data = { day10: 0, hour24: 0 };
-    for await (let msg of client.fetch(
-      { since: new Date(now - DAY10), to: "*.eu.org" },
-      { internalDate: true },
-    )) {
-      data.day10++;
-      if (now - msg.internalDate.getTime() <= HOUR24) {
-        data.hour24++;
+    for (let domain of DOMAIN_LIST_SERVER) {
+      for await (let msg of client.fetch(
+        { since: new Date(now - DAY10), to: `*${domain}` },
+        { internalDate: true },
+      )) {
+        data.day10++;
+        if (now - msg.internalDate.getTime() <= HOUR24) {
+          data.hour24++;
+        }
       }
     }
     return data;
