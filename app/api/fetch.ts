@@ -22,10 +22,14 @@ async function newClient() {
         logger: false,
       });
 
-      await newClient.connect();
-      await newClient.mailboxOpen(process.env.IMAP_PATH ?? "Junk", {
-        readOnly: true,
-      });
+      try {
+        await newClient.connect();
+        await newClient.mailboxOpen(process.env.IMAP_PATH ?? "Junk", {
+          readOnly: true,
+        });
+      } catch (err: any) {
+        reject({ message: `${err}, ${err.responseText}` });
+      }
       client = newClient;
       resolve();
     }).finally(() => {

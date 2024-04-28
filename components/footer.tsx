@@ -4,11 +4,14 @@ import { PieChart, TrendingUp } from "lucide-react";
 import Count from "@/components/count";
 
 function Footer() {
-  const [data, setData] = useState({ day10: 0, hour24: 0 });
+  const [data, setData] = useState({ day10: "x", hour24: "x" });
 
   useEffect(() => {
     const controller = new AbortController();
     fetch("/api/count", { signal: controller.signal }).then(async (res) => {
+      if (!res.ok) {
+        return;
+      }
       setData(await res.json());
     });
     return () => controller.abort("unload");
