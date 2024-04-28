@@ -20,11 +20,13 @@ export const useConfig = create<Config>()(
       update(mail: string, domain: string) {
         const history = get().history;
         const old = get().mail + get().domain;
-        const index = history.indexOf(old);
-        if (index >= 0) {
-          history.splice(index, 1);
+        if (get().domain) {
+          const index = history.indexOf(old);
+          if (index >= 0) {
+            history.splice(index, 1);
+          }
+          history.unshift(old);
         }
-        history.unshift(old);
         set({ mail, domain, history });
       },
       clearHistory(index?: number) {
