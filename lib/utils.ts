@@ -21,3 +21,7 @@ export function delay(milliseconds: number) {
     setTimeout(resolve, milliseconds);
   });
 }
+
+export function getDomainList() {
+  return (process.env.DOMAIN_LIST ?? "@not.set.yet").split("|");
+}

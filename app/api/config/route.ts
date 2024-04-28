@@ -1,8 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
-import { DOMAIN_LIST_SERVER } from "@/lib/constant";
 import { ConfigServer } from "@/lib/store/config-server";
+import { getDomainList } from "@/lib/utils";
+import { unstable_noStore as noStore } from "next/cache";
 
 export async function GET(req: NextRequest) {
-  const config: ConfigServer = { domain: DOMAIN_LIST_SERVER };
+  noStore();
+  const config: ConfigServer = { domain: getDomainList() };
+  console.log("config:", config);
   return NextResponse.json(config);
 }

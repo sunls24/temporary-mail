@@ -1,6 +1,6 @@
 import { ImapFlow, SearchObject } from "imapflow";
 import { Envelope } from "@/lib/types";
-import { DOMAIN_LIST_SERVER } from "@/lib/constant";
+import { getDomainList } from "@/lib/utils";
 
 let client: ImapFlow;
 let connecting: Promise<void> | undefined;
@@ -81,7 +81,7 @@ export async function fetchLast10Day() {
   const now = new Date().getTime();
   return await run(async () => {
     const data = { day10: 0, hour24: 0 };
-    for (let domain of DOMAIN_LIST_SERVER) {
+    for (let domain of getDomainList()) {
       for await (let msg of client.fetch(
         { since: new Date(now - DAY10), to: `*${domain}` },
         { internalDate: true },
