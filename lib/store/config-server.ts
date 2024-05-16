@@ -2,6 +2,7 @@ import { createStore } from "zustand/vanilla";
 
 export interface ConfigServer {
   domain: string[];
+  clarity?: string;
 }
 
 const def: ConfigServer = { domain: [] };

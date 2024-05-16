@@ -5,7 +5,9 @@ import { unstable_noStore as noStore } from "next/cache";
 
 export async function GET(req: NextRequest) {
   noStore();
-  const config: ConfigServer = { domain: getDomainList() };
-  console.log("config:", config);
+  const config: ConfigServer = {
+    domain: getDomainList(),
+    clarity: process.env.MICROSOFT_CLARITY,
+  };
   return NextResponse.json(config);
 }

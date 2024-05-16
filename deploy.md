@@ -34,6 +34,7 @@
 - `IMAP_PATH`: 默认为`Junk`（非必须）
 - `HOSTNAME`: 服务监听地址，默认为`127.0.0.1`（非必须）
 - `PORT`: 服务监听端口，默认为`3002`（非必须）
+- `MICROSOFT_CLARITY`: 微软 Clarity 统计，默认关闭（非必须）
 
 ## 部署
 

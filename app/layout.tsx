@@ -4,6 +4,7 @@ import React from "react";
 import { Toaster } from "@/components/ui/sonner";
 import { Analytics } from "@vercel/analytics/react";
 import { ThemeProvider } from "@/components/theme-provider";
+import Clarity from "@/components/clarity";
 
 export const metadata: Metadata = {
   title: "临时邮箱 - 匿名的一次性邮箱",
@@ -50,7 +51,8 @@ export default function RootLayout({
           {children}
           <Toaster richColors position="top-right" />
         </ThemeProvider>
-        {process.env.VERCEL && <Analytics />}
+        {!!process.env.VERCEL && <Analytics />}
+        <Clarity />
       </body>
     </html>
   );
