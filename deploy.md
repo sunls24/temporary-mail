@@ -12,7 +12,7 @@
 
 2. 然后需要添加一条`Catch-All`的规则到目标邮箱中，如图:
 
-此处需要一个自己的邮箱作为目标邮箱，推荐使用 Outlook *（环境变量配置也是基于此邮箱）*
+此处需要一个自己的邮箱作为目标邮箱，推荐使用 Outlook _（环境变量配置也是基于此邮箱）_
 
 ![email-routing.png](doc/email-routing.png)
 
@@ -20,7 +20,7 @@
 
 默认会从垃圾邮件`Junk`文件夹中获取，可通过`IMAP_PATH`环境变量指定。
 
-需要添加一个或多个邮件规则，将接收到的目标邮件移动到指定的文件夹下 *（需要将图中的`.eu.org`替换为自己的域名，可配置多个）*
+需要添加一个或多个邮件规则，将接收到的目标邮件移动到指定的文件夹下 _（需要将图中的`.eu.org`替换为自己的域名，可配置多个）_
 
 ![rule.png](doc/rule.png)
 
@@ -38,7 +38,7 @@
 
 ## 部署
 
-*请修改其中的环境变量配置*
+_请修改其中的环境变量配置_
 
 ### Docker
 
@@ -48,12 +48,12 @@ docker run --name mail -d --restart unless-stopped -e 'HOSTNAME=0.0.0.0' -e 'IMA
 
 ### Docker Compose & Caddy (推荐)
 
-*如果不需要反向代理，需要设置`HOSTNAME=0.0.0.0`环境变量*
+_如果不需要反向代理，需要设置`HOSTNAME=0.0.0.0`环境变量_
 
 **docker-compose.yaml**
 
 ```yaml
-version: '3.0'
+version: "3.0"
 
 services:
   mail:
