@@ -1,16 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { fetchOne } from "@/app/api/fetch";
-import { simpleParser } from "mailparser";
 
 export async function GET(req: NextRequest) {
   try {
-    const uid = req.nextUrl.searchParams.get("uid");
-    if (!uid) {
-      return NextResponse.json({ error: "no email uid" }, { status: 400 });
+    const key = req.nextUrl.searchParams.get("key");
+    if (!key) {
+      return NextResponse.json({ error: "no email key" }, { status: 400 });
     }
-    const mail = await fetchOne(uid);
-    const parsed = await simpleParser(Buffer.from(mail.source));
-    return NextResponse.json({ __html: parsed.html });
+    const html = await fetchOne(key);
+    return NextResponse.json({ __html: html });
   } catch (e: any) {
     return NextResponse.json({ error: e.message }, { status: 500 });
   }

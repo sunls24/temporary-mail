@@ -37,7 +37,7 @@ function MailDetail({
       setController(controller);
       setHtml({ __html: loadingHtml });
       const res = await (
-        await fetch(`/api/detail?uid=${envelope.uid}`, {
+        await fetch(`/api/detail?key=${envelope.key}`, {
           signal: controller.signal,
         })
       ).json();
@@ -60,7 +60,7 @@ function MailDetail({
           <DialogTitle>{envelope.subject}</DialogTitle>
           <DialogDescription className="flex flex-col justify-between sm:flex-row">
             <span>
-              {envelope.from.name} {`<${envelope.from.address}>`}
+              {envelope.fromName} {`<${envelope.fromAddress}>`}
             </span>
             {fmtLocaleTime(new Date(envelope.date))}
           </DialogDescription>

@@ -1,104 +1,47 @@
-import { ImapFlow, SearchObject } from "imapflow";
-import { Envelope } from "@/lib/types";
-import { getDomainList } from "@/lib/utils";
+import {
+  GetObjectCommand,
+  ListObjectsV2Command,
+  S3Client,
+} from "@aws-sdk/client-s3";
 
-let client: ImapFlow;
-let connecting: Promise<void> | undefined;
+const s3 = new S3Client({
+  region: "auto",
+  endpoint: `https://${process.env.CF_ACCOUNT_ID}.r2.cloudflarestorage.com`,
+  credentials: {
+    accessKeyId: process.env.R2_ACCESS_KEY_ID!,
+    secretAccessKey: process.env.R2_SECRET_ACCESS_KEY!,
+  },
+});
 
-async function newClient() {
-  if (!connecting) {
-    connecting = new Promise<void>(async (resolve, reject) => {
-      console.log("newClient...");
-      if (client) {
-        client.close();
-      }
-      const newClient = new ImapFlow({
-        host: process.env.IMAP_HOST ?? "outlook.office365.com",
-        port: parseInt(process.env.IMAP_PORT ?? "993"),
-        secure: JSON.parse((process.env.IMAP_SECURE ?? "true").toLowerCase()),
-        auth: {
-          user: process.env.IMAP_USER ?? "",
-          pass: process.env.IMAP_PASS ?? "",
-        },
-        logger: false,
-      });
+const bucket = process.env.R2_BUCKET!;
 
-      try {
-        await newClient.connect();
-        await newClient.mailboxOpen(process.env.IMAP_PATH ?? "Junk", {
-          readOnly: true,
-        });
-      } catch (err: any) {
-        reject({ message: `${err}, ${err.responseText}` });
-      }
-      client = newClient;
-      resolve();
-    }).finally(() => {
-      connecting = undefined;
-    });
-  }
-  await connecting;
+export async function fetchLast(to: string) {
+  const objs = await s3.send(
+    new ListObjectsV2Command({ Bucket: bucket, Prefix: "email;" + to + ";" }),
+  );
+  return objs.Contents?.map((v) => v.Key) ?? [];
 }
 
-async function run(fn: () => Promise<any>) {
-  if (!client) {
-    await newClient();
-  }
-  let res: any;
-  try {
-    res = await fn();
-  } catch (e: any) {
-    console.log("Error:", e.message);
-    if (e.message !== "Connection not available") {
-      throw e;
-    }
-    await newClient();
-    res = await fn();
-  }
-  return res;
-}
-
-export async function fetchLast(search: SearchObject) {
-  console.log("fetchLast", search.to);
-  return await run(async () => {
-    const mailList: Envelope[] = [];
-    for await (let msg of client.fetch(search, { envelope: true })) {
-      mailList.push({
-        uid: msg.uid,
-        date: msg.envelope.date,
-        subject: msg.envelope.subject,
-        from: msg.envelope.from[0],
-      });
-    }
-    return mailList;
-  });
-}
-
-const DAY10 = 864000000;
 const HOUR24 = 86400000;
 
 export async function fetchLast10Day() {
   const now = new Date().getTime();
-  return await run(async () => {
-    const data = { day10: 0, hour24: 0 };
-    for (let domain of getDomainList()) {
-      for await (let msg of client.fetch(
-        { since: new Date(now - DAY10), to: `*${domain}` },
-        { internalDate: true },
-      )) {
-        data.day10++;
-        if (now - msg.internalDate.getTime() <= HOUR24) {
-          data.hour24++;
-        }
-      }
-    }
+  const objs = await s3.send(new ListObjectsV2Command({ Bucket: bucket }));
+  const data = { day10: 0, hour24: 0 };
+  if (!objs.Contents) {
     return data;
+  }
+  objs.Contents.forEach((obj) => {
+    data.day10++;
+    const date = atob(obj.Key!.split(";")[2]).split(";")[3];
+    if (now - new Date(date).getTime() <= HOUR24) {
+      data.hour24++;
+    }
   });
+  return data;
 }
 
-export async function fetchOne(uid: string) {
-  console.log("fetchOne", uid);
-  return await run(
-    async () => await client.fetchOne(uid, { source: true }, { uid: true }),
-  );
+export async function fetchOne(key: string) {
+  const obj = await s3.send(new GetObjectCommand({ Bucket: bucket, Key: key }));
+  return obj.Body?.transformToString() ?? "";
 }

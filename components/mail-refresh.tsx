@@ -44,11 +44,25 @@ function MailRefresh() {
     }
     setLoading(true);
     try {
-      const res = await (await fetch(`/api/mail?to=${mailAddress}`)).json();
-      if (res.error) {
-        throw new Error(res.error);
+      const list = await (await fetch(`/api/mail?to=${mailAddress}`)).json();
+      if (list.error) {
+        throw new Error(list.error);
       }
-      setEnvelope(res);
+
+      setEnvelope(
+        list.map((key: string) => {
+          const [fromName, fromAddress, subject, date] = atob(
+            key.split(";")[2],
+          ).split(";");
+          return {
+            key,
+            fromName: decodeURIComponent(fromName),
+            fromAddress,
+            subject: decodeURIComponent(subject),
+            date,
+          };
+        }),
+      );
     } catch (e: any) {
       toast.error(e.message);
     } finally {
@@ -60,7 +74,7 @@ function MailRefresh() {
   return (
     <>
       {loading ? (
-        <RefreshCw size={20} className="mr-6 animate-spin " />
+        <RefreshCw size={20} className="mr-6 animate-spin" />
       ) : (
         <Button variant="outline" onClick={onRefresh}>
           <RefreshCw size={16} className="mr-1" />

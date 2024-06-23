@@ -1,8 +1,7 @@
-import { MessageAddressObject } from "imapflow";
-
 export interface Envelope {
-  uid: number;
-  date: Date;
+  key: string;
+  fromName: string;
+  fromAddress: string;
   subject: string;
-  from: MessageAddressObject;
+  date: Date;
 }
