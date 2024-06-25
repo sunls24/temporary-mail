@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { RefreshCw } from "lucide-react";
-import { REFRESH_SECONDS } from "@/lib/constant";
+import { DELIMITER, REFRESH_SECONDS } from "@/lib/constant";
 import { useEnvelope } from "@/lib/store/envelope";
 import { useConfig } from "@/lib/store/config";
 import { emitter, mittKey } from "@/lib/mitt";
@@ -44,16 +44,18 @@ function MailRefresh() {
     }
     setLoading(true);
     try {
-      const list = await (await fetch(`/api/mail?to=${mailAddress}`)).json();
+      const res = await fetch(`/api/mail?to=${mailAddress}`);
+      const list = await res.json();
       if (list.error) {
         throw new Error(list.error);
       }
 
+      const admin = res.headers.get("admin");
       setEnvelope(
         list.map((key: string) => {
           const [fromName, fromAddress, subject, date] = atob(
-            key.split(";")[2],
-          ).split(";");
+            key.split(DELIMITER)[2],
+          ).split(DELIMITER);
           return {
             key,
             fromName: decodeURIComponent(fromName),
@@ -62,6 +64,7 @@ function MailRefresh() {
             date,
           };
         }),
+        admin === "true",
       );
     } catch (e: any) {
       toast.error(e.message);

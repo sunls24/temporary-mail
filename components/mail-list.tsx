@@ -3,18 +3,26 @@ import React from "react";
 import { useEnvelope } from "@/lib/store/envelope";
 import { fmtLocaleTime } from "@/lib/utils";
 import MailDetail from "@/components/mail-detail";
+import { DELIMITER } from "@/lib/constant";
 
 function MailList() {
-  const envelope = useEnvelope((state) => state.list);
+  const [envelope, admin] = useEnvelope((state) => [state.list, state.admin]);
 
   return (
     <div className="flex flex-1 flex-col-reverse overflow-auto">
       <span className="flex-1" />
       {envelope.map((value) => (
         <MailDetail key={value.key} envelope={value}>
-          <div className="border-b px-4 py-2 first:border-0 hover:bg-secondary">
-            <span className="font-medium">{value.subject}</span>
-            <div className="mb-2 flex w-full justify-between text-muted-foreground">
+          <div className="border-b px-4 py-3 first:border-0 hover:bg-secondary">
+            <div className="flex items-center justify-between">
+              <span className="font-medium">{value.subject}</span>
+              {admin && (
+                <span className="text-sm text-muted-foreground">
+                  {value.key.split(DELIMITER)[1]}
+                </span>
+              )}
+            </div>
+            <div className="flex items-center justify-between text-muted-foreground">
               <span>{value.fromName}</span>
               <span className="text-sm">
                 {fmtLocaleTime(new Date(value.date))}

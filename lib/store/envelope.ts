@@ -3,12 +3,14 @@ import { Envelope } from "@/lib/types";
 
 interface EnvelopeStore {
   list: Envelope[];
-  setEnvelope(list: Envelope[]): void;
+  admin: boolean;
+  setEnvelope(list: Envelope[], admin: boolean): void;
 }
 
 export const useEnvelope = create<EnvelopeStore>()((set) => ({
   list: [],
-  setEnvelope(list: Envelope[]) {
-    set({ list });
+  admin: false,
+  setEnvelope(list: Envelope[], admin: boolean) {
+    set({ list, admin });
   },
 }));
