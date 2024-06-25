@@ -13,6 +13,7 @@ import { toast } from "sonner";
 import MailHistory from "@/components/mail-history";
 import { useStoreWithEqualityFn } from "zustand/traditional";
 import { configServerStore } from "@/lib/store/config-server";
+import { useRouter, useSearchParams } from "next/navigation";
 
 function Actions() {
   const configServer = useStoreWithEqualityFn(configServerStore);
@@ -20,9 +21,25 @@ function Actions() {
   const [mail, setMail] = useState(config.mail);
   const [domain, setDomain] = useState(config.domain);
 
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    const address = searchParams.get("to");
+    console.log("-> to:", address);
+    if (!address) {
+      return;
+    }
+    const [mail, domain] = address.split("@");
+    config.update(mail, "@" + domain);
+  }, []);
+
   useEffect(() => {
     mail !== config.mail && setMail(config.mail);
     domain !== config.domain && setDomain(config.domain);
+    if (config.domain) {
+      router.replace("/?to=" + config.mail + config.domain);
+    }
   }, [config]);
 
   useEffect(() => {
