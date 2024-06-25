@@ -30,8 +30,18 @@ function Actions() {
     if (!address) {
       return;
     }
-    const [mail, domain] = address.split("@");
-    config.update(mail, "@" + domain);
+    const [toMail, toDomain] = address.split("@");
+    config.update(toMail, "@" + toDomain, (cfg) => {
+      const currentAddress = cfg.mail + cfg.domain;
+      if (currentAddress === address) {
+        return false;
+      }
+      const index = cfg.history.indexOf(address);
+      if (index >= 0) {
+        cfg.clearHistory(index);
+      }
+      return true;
+    });
   }, []);
 
   useEffect(() => {

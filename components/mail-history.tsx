@@ -25,8 +25,8 @@ function MailHistory({
     setOpen(false);
     setTimeout(() => {
       clearHistory(index);
-      const atIndex = value.indexOf("@");
-      onChange(value.substring(0, atIndex), value.substring(atIndex));
+      const [mail, domain] = value.split("@");
+      onChange(mail, "@" + domain);
     }, 100);
   }
 

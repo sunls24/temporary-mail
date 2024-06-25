@@ -7,7 +7,11 @@ interface Config {
   domain: string;
   history: string[];
 
-  update(mail: string, domain: string): void;
+  update(
+    mail: string,
+    domain: string,
+    updateHistory?: (cfg: Config) => boolean,
+  ): void;
   clearHistory(index?: number): void;
 }
 
@@ -17,10 +21,14 @@ export const useConfig = create<Config>()(
       mail: randomMail(),
       domain: "",
       history: [],
-      update(mail: string, domain: string) {
+      update(
+        mail: string,
+        domain: string,
+        updateHistory: (cfg: Config) => boolean = () => true,
+      ) {
         const history = get().history;
-        const old = get().mail + get().domain;
-        if (get().domain) {
+        if (get().domain && updateHistory(get())) {
+          const old = get().mail + get().domain;
           const index = history.indexOf(old);
           if (index >= 0) {
             history.splice(index, 1);
