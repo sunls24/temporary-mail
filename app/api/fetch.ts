@@ -14,7 +14,7 @@ const s3 = new S3Client({
   },
 });
 
-const bucket = process.env.R2_BUCKET!;
+const bucket = process.env.R2_BUCKET ?? "main";
 
 export async function fetchLast(to: string) {
   let prefix = "email" + DELIMITER + to + DELIMITER;
