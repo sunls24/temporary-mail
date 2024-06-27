@@ -15,25 +15,28 @@ const s3 = new S3Client({
 });
 
 const bucket = process.env.R2_BUCKET ?? "main";
+const defPrefix = "email" + DELIMITER;
 
 export async function fetchLast(to: string) {
-  let prefix = "email" + DELIMITER + to + DELIMITER;
-  if (to === process.env.ADMIN_ADDRESS) {
-    prefix = "";
+  let prefix = defPrefix;
+  if (to !== process.env.ADMIN_ADDRESS) {
+    prefix += to + DELIMITER;
   }
   const objs = await s3.send(
     new ListObjectsV2Command({ Bucket: bucket, Prefix: prefix }),
   );
   const keys = objs.Contents?.map((v) => v.Key!) ?? [];
   keys.sort((a: string, b: string) => getDate(b).localeCompare(getDate(a)));
-  return { keys, admin: prefix === "" };
+  return { keys, admin: prefix === defPrefix };
 }
 
 const HOUR24 = 86400000;
 
 export async function fetchCount() {
   const now = new Date().getTime();
-  const objs = await s3.send(new ListObjectsV2Command({ Bucket: bucket }));
+  const objs = await s3.send(
+    new ListObjectsV2Command({ Bucket: bucket, Prefix: defPrefix }),
+  );
   const data = { day10: 0, hour24: 0 };
   if (!objs.Contents) {
     return data;
