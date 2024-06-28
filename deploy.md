@@ -56,16 +56,23 @@
 
 ## 环境变量配置
 
-- `CF_ACCOUNT_ID`: Cloudflare 的 AccountID（必须）
-- `R2_ACCESS_KEY_ID`: R2 存储 APIToken 的 AccessKeyId（必须）
-- `R2_SECRET_ACCESS_KEY`: R2 存储 APIToken 的 SecretAccessKey（必须）
-- `DOMAIN_LIST`: 支持的域名列表，使用`|`分割，例如: `@isco.eu.org|@isco2.eu.org`，不要忘记`@`符号（必须）
+### 必须
+- `CF_ACCOUNT_ID`: Cloudflare 的 AccountID
+- `R2_BUCKET`: R2 存储桶的名称，默认`main`
+- `R2_ACCESS_KEY_ID`: R2 存储 APIToken 的 AccessKeyId
+- `R2_SECRET_ACCESS_KEY`: R2 存储 APIToken 的 SecretAccessKey
+- `DOMAIN_LIST`: 支持的域名列表，使用`|`分割，例如: `@isco.eu.org|@isco2.eu.org`，不要忘记`@`符号
 
-- `R2_BUCKET`: R2 存储桶的名称，默认`main`（非必须）
-- `MICROSOFT_CLARITY`: 微软 Clarity 统计，默认关闭（非必须）
-- `ADMIN_ADDRESS`: 管理员地址，使用此地址可以查看所有的邮件列表（非必须）
-- `HOSTNAME`: 服务监听地址，默认为`127.0.0.1`（非必须）
-- `PORT`: 服务监听端口，默认为`3000`（非必须）
+### 非必须
+- `ADMIN_ADDRESS`: 管理员地址，使用此地址可以查看所有的邮件列表，例如`admin@isco.eu.org`
+- `HOSTNAME`: 服务监听地址，默认为`127.0.0.1`
+- `PORT`: 服务监听端口，默认为`3000`
+
+### 统计
+- `MICROSOFT_CLARITY`: 微软 Clarity 统计，默认关闭
+- `UMAMI_ID`: Umami 统计的 website-id
+- `UMAMI_URL`: Umami 统计的 script.js 地址
+- `UMAMI_DOMAINS`: Umami 统计只在特定域名运行，逗号分割
 
 ## 部署
 

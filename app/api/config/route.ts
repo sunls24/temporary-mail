@@ -7,7 +7,6 @@ export async function GET(req: NextRequest) {
   noStore();
   const config: ConfigServer = {
     domain: getDomainList(),
-    clarity: process.env.MICROSOFT_CLARITY,
   };
   return NextResponse.json(config);
 }

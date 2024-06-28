@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { Analytics } from "@vercel/analytics/react";
 import { ThemeProvider } from "@/components/theme-provider";
 import Clarity from "@/components/clarity";
+import Umami from "@/components/umami";
 
 export const metadata: Metadata = {
   title: "临时邮箱 - 匿名的一次性邮箱",
@@ -53,6 +54,7 @@ export default function RootLayout({
         </ThemeProvider>
         {!!process.env.VERCEL && <Analytics />}
         <Clarity />
+        <Umami />
       </body>
     </html>
   );
