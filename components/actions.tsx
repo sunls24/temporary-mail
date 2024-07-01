@@ -57,7 +57,7 @@ function Actions() {
       return;
     }
     console.log("-> set default domain:", configServer.domain[0]);
-    config.update(config.mail, configServer.domain[0]);
+    config.update(config.mail, configServer.domain[0], (cfg) => false);
   }, [configServer.domain]);
 
   function onSave() {
@@ -66,7 +66,13 @@ function Actions() {
     }
     setEdited(false);
     if (config.mail != mail || config.domain != domain) {
-      config.update(mail, domain);
+      config.update(mail, domain, (cfg) => {
+        const index = cfg.history.indexOf(mail + domain);
+        if (index >= 0) {
+          cfg.clearHistory(index);
+        }
+        return true;
+      });
       toast.success("已修改至新地址 " + mail + domain);
       setTimeout(() => emitter.emit(mittKey.REFRESH));
     }
