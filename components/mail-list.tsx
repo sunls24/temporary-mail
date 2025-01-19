@@ -9,11 +9,10 @@ function MailList() {
   const [envelope, admin] = useEnvelope((state) => [state.list, state.admin]);
 
   return (
-    <div className="flex flex-1 flex-col-reverse overflow-auto">
-      <span className="flex-1" />
+    <div className="flex flex-1 flex-col overflow-auto">
       {envelope.map((value) => (
         <MailDetail key={value.key} envelope={value}>
-          <div className="border-b px-4 py-3 first:border-0 hover:bg-secondary">
+          <div className="border-b px-4 py-3 hover:bg-secondary">
             <div className="flex items-center justify-between">
               <span className="font-medium">{value.subject}</span>
               {admin && (

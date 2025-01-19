@@ -27,10 +27,8 @@ export async function fetchLast(to: string) {
   if (to !== process.env.ADMIN_ADDRESS) {
     prefix += to + DELIMITER;
   }
-  const objs = await s3.send(
-    new ListObjectsV2Command({ Bucket: bucket, Prefix: prefix }),
-  );
-  const keys = objs.Contents?.map((v) => v.Key!) ?? [];
+  const objs = await listAll(prefix);
+  const keys = objs?.map((v) => v.Key!) ?? [];
   keys.sort((a: string, b: string) => getDate(b).localeCompare(getDate(a)));
   return { keys, admin: prefix === defPrefix };
 }
@@ -43,7 +41,7 @@ export async function fetchCount() {
     return ret;
   }
   const now = new Date().getTime();
-  const objs = await listAll(undefined);
+  const objs = await listAll(defPrefix);
   const data = { day10: 0, hour24: 0 };
   if (!objs) {
     return data;
@@ -58,16 +56,16 @@ export async function fetchCount() {
   return data;
 }
 
-async function listAll(token?: string) {
+async function listAll(prefix: string, token?: string) {
   const objs = await s3.send(
     new ListObjectsV2Command({
       Bucket: bucket,
-      Prefix: defPrefix,
+      Prefix: prefix,
       ContinuationToken: token,
     }),
   );
   if (objs.IsTruncated) {
-    const next = await listAll(objs.NextContinuationToken);
+    const next = await listAll(prefix, objs.NextContinuationToken);
     if (next) {
       objs.Contents?.push(...next);
     }
