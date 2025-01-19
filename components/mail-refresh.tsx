@@ -26,7 +26,10 @@ function MailRefresh() {
     const timerId = setTimeout(
       async () => {
         if (seconds >= REFRESH_SECONDS - 1 || !timer) {
-          emitter.emit(mittKey.REFRESH);
+          setTimeout(
+            () => emitter.emit(mittKey.REFRESH),
+            mailAddress.includes("@") ? 0 : 50,
+          );
           return;
         }
         setSeconds(seconds + 1);
