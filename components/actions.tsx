@@ -14,8 +14,10 @@ import MailHistory from "@/components/mail-history";
 import { useStoreWithEqualityFn } from "zustand/traditional";
 import { configServerStore } from "@/lib/store/config-server";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 function Actions() {
+  const t = useTranslations();
   const configServer = useStoreWithEqualityFn(configServerStore);
   const config = useConfig();
   const [mail, setMail] = useState(config.mail);
@@ -73,7 +75,7 @@ function Actions() {
         }
         return true;
       });
-      toast.success("已修改至新地址 " + mail + domain);
+      toast.success(t("editNew") + " " + mail + domain);
       setTimeout(() => emitter.emit(mittKey.REFRESH));
     }
   }
@@ -82,13 +84,13 @@ function Actions() {
     const random = randomMail();
     config.update(random, domain);
     setTimeout(() => emitter.emit(mittKey.REFRESH));
-    toast.success("已随机至新地址 " + random + domain);
+    toast.success(t("randomNew") + " " + random + domain);
   }
 
   function onChange(mail: string, domain: string) {
     config.update(mail, domain);
     setTimeout(() => emitter.emit(mittKey.REFRESH));
-    toast.success("已切换至新地址 " + mail + domain);
+    toast.success(t("changeNew") + " " + mail + domain);
   }
 
   function onMailChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -134,23 +136,23 @@ function Actions() {
       {!edited && (
         <Button variant="outline" onClick={() => setEdited(true)}>
           <PenLine size={16} className="mr-1" />
-          编辑
+          {t("edit")}
         </Button>
       )}
       {edited && (
         <Button variant="outline" onClick={onSave}>
           <CheckCircle size={16} className="mr-1" />
-          保存
+          {t("save")}
         </Button>
       )}
       <Button variant="outline" onClick={onRandom}>
         <Shuffle size={16} className="mr-1" />
-        随机
+        {t("random")}
       </Button>
       <MailHistory onChange={onChange}>
         <Button variant="outline">
           <History size={16} className="mr-1" />
-          历史
+          {t("history")}
         </Button>
       </MailHistory>
     </div>

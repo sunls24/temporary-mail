@@ -8,6 +8,7 @@ import { useConfig } from "@/lib/store/config";
 import { Button } from "@/components/ui/button";
 import { Eraser, MailQuestion, Trash } from "lucide-react";
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 
 function MailHistory({
   onChange,
@@ -16,6 +17,7 @@ function MailHistory({
   onChange: (mail: string, domain: string) => void;
   children: React.ReactNode;
 }) {
+  const t = useTranslations();
   const [history, clearHistory] = useConfig((state) => [
     state.history,
     state.clearHistory,
@@ -39,7 +41,7 @@ function MailHistory({
         {history.length === 0 ? (
           <div className="flex items-center gap-1 p-3 text-sm text-muted-foreground">
             <MailQuestion size={18} strokeWidth={1.8} />
-            这里什么也没有
+            {t("nothing")}
           </div>
         ) : (
           <>
@@ -74,11 +76,11 @@ function MailHistory({
                 onClick={() => {
                   setOpen(false);
                   setTimeout(clearHistory, 100);
-                  toast.success("已清空所有历史纪录");
+                  toast.success(t("clearHistoryTip"));
                 }}
               >
                 <Eraser size={14} className="mr-1" />
-                清空历史
+                {t("clearHistory")}
               </Button>
             </div>
           </>

@@ -1,0 +1,20 @@
+{
+  "title": "临时邮箱",
+  "copy": "已拷贝至剪切板",
+  "edit": "编辑",
+  "save": "保存",
+  "random": "随机",
+  "history": "历史",
+  "nothing": "这里什么也没有",
+  "refresh": "刷新",
+  "refreshB": "将在",
+  "refreshA": "后自动刷新",
+  "clearHistory": "清空历史",
+  "clearHistoryTip": "已清空所有历史纪录",
+  "editNew": "已修改至新地址",
+  "randomNew": "已随机至新地址",
+  "changeNew": "已切换至新地址",
+  "day10B": "最近10天共收到",
+  "hour24B": "24小时",
+  "countA": "封邮件"
+}

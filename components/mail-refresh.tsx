@@ -7,8 +7,10 @@ import { useEnvelope } from "@/lib/store/envelope";
 import { useConfig } from "@/lib/store/config";
 import { emitter, mittKey } from "@/lib/mitt";
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 
 function MailRefresh() {
+  const t = useTranslations();
   const [seconds, setSeconds] = useState(0);
   const [timer, setTimer] = useState<NodeJS.Timeout>();
   const [loading, setLoading] = useState(false);
@@ -81,13 +83,13 @@ function MailRefresh() {
       ) : (
         <Button variant="outline" onClick={onRefresh}>
           <RefreshCw size={16} className="mr-1" />
-          刷新
+          {t("refresh")}
         </Button>
       )}
       <span className="self-end pb-0.5 text-sm text-muted-foreground">
-        将在
+        {t("refreshB")}
         <span className="font-medium">{REFRESH_SECONDS - seconds}s</span>
-        后自动刷新
+        {t("refreshA")}
       </span>
     </>
   );

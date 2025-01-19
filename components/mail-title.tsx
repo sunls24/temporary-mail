@@ -6,17 +6,17 @@ import { Button } from "@/components/ui/button";
 import { ClipboardCopy } from "lucide-react";
 import { useConfig } from "@/lib/store/config";
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 
 function MailTitle() {
   const config = useConfig();
+  const t = useTranslations();
 
   function onCopy() {
     navigator.clipboard
       .writeText(config.mail + config.domain)
-      .then(() =>
-        toast.success("已拷贝至剪切板 " + config.mail + config.domain),
-      )
-      .catch((e) => toast.error(`出错啦: ${e.message}`));
+      .then(() => toast.success(t("copy") + " " + config.mail + config.domain))
+      .catch((e) => toast.error(`Error: ${e.message}`));
   }
 
   return (
