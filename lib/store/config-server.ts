@@ -14,6 +14,9 @@ export const createConfigServerStore = () => {
 };
 
 const fetchConfig = async () => {
+  if (typeof window === "undefined") {
+    return;
+  }
   console.log("-> fetch server config");
   const res = await fetch("/api/config");
   return await res.json();

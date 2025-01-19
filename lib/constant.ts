@@ -4,3 +4,5 @@ export const REFRESH_SECONDS =
 export const VERSION = "1.0.4";
 
 export const DELIMITER = ";";
+
+export const COUNT_KEY = "COUNT";
