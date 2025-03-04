@@ -1,0 +1,16 @@
+---
+import { useTranslations, type language } from "@/i18n/ui"
+import ToGithub from "@/components/ToGithub"
+
+const { lang } = Astro.props
+const t = useTranslations(lang as language)
+---
+
+<header class="bg-sidebar border-b py-3 shadow-2xs">
+  <div class="mx-auto flex w-[90%] max-w-4xl items-center px-2.5 sm:px-4.5">
+    <img alt="logo" src="/favicon.svg" class="h-6" />
+    <span class="mx-1 font-semibold">{t("title")}</span>
+    <div class="flex-1"></div>
+    <ToGithub client:load />
+  </div>
+</header>

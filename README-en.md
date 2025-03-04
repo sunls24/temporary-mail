@@ -1,5 +1,14 @@
 ## 📮 Temporary Mail
 
+**(V2 version under reconstruction)**
+
+Using Golang + Astro + React + Long Polling to get emails in real-time
+
+- [x] Email CSS style isolation
+- [x] Real-time email retrieval using long polling
+- [ ] Dark theme and language switching
+- [ ] Support for viewing and downloading attachments
+
 Anonymous disposable email to protect your personal email address from spam.
 
 ## 🎉 What can it do?

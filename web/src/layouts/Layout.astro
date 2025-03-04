@@ -1,0 +1,53 @@
+---
+import { useTranslations, type language } from "@/i18n/ui"
+import { Toaster } from "@/components/ui/sonner"
+
+const { lang } = Astro.props
+const t = useTranslations(lang as language)
+
+import "@/style/global.css"
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Tmail" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta
+      name="theme-color"
+      media="(prefers-color-scheme: light)"
+      content="#FAFAFA"
+    />
+    <meta
+      name="theme-color"
+      media="(prefers-color-scheme: dark)"
+      content="#09090B"
+    />
+    <link
+      rel="apple-touch-icon"
+      href="/apple-touch-icon.png"
+      type="image/png"
+      sizes="180x180"
+    />
+    <meta name="description" content={t("pageDesc")} />
+    <title>{t("pageTitle")}</title>
+  </head>
+  <body class="flex flex-col">
+    <slot />
+    <Toaster position="top-right" richColors={true} client:load />
+  </body>
+</html>
+
+<style>
+  html,
+  body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+  }
+</style>
