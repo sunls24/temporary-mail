@@ -26,6 +26,9 @@ export function initStore(domainList: string[]) {
 
 export function updateAddress(address: string) {
   const current = $address.get()
+  if (current === address) {
+    return
+  }
   $address.set(address)
   if (!current) {
     return

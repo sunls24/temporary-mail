@@ -10,6 +10,7 @@ import (
 	"tmail/config"
 	"tmail/ent"
 	"tmail/internal/api"
+	"tmail/internal/constant"
 	"tmail/internal/route"
 	"tmail/web"
 )
@@ -35,6 +36,7 @@ func (app App) Run() error {
 	defer client.Close()
 
 	e := echo.New()
+	e.Pre(i18n)
 	e.Use(api.Middleware(client, cfg))
 	e.Use(middleware.RecoverWithConfig(middleware.RecoverConfig{
 		DisablePrintStack: true,
@@ -50,4 +52,21 @@ func (app App) Run() error {
 	route.Register(e)
 	e.StaticFS("/", echo.MustSubFS(web.FS, "dist"))
 	return e.Start(fmt.Sprintf("%s:%s", cfg.Host, cfg.Port))
+}
+
+func i18n(next echo.HandlerFunc) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		if c.Request().URL.Path != "/" {
+			return next(c)
+		}
+
+		al := c.Request().Header.Get("Accept-Language")
+		if al == "" {
+			al = constant.DefaultLang
+		}
+		lang := al[:2]
+
+		c.Request().URL.Path += lang + "/"
+		return next(c)
+	}
 }

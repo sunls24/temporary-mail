@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useMemo, useState } from "react"
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -15,9 +15,19 @@ import { CircleArrowRight, Frown, Mail } from "lucide-react"
 import * as AlertDialogPrimitive from "@radix-ui/react-alert-dialog"
 import { Button } from "@/components/ui/button.tsx"
 import { clsx } from "clsx"
+import { type language, useTranslations } from "@/i18n/ui"
+import { fmtString } from "@/lib/utils.ts"
 
-function History({ children }: { children: React.ReactNode }) {
+function History({
+  children,
+  lang,
+}: {
+  children: React.ReactNode
+  lang: string
+}) {
   const [history, setHistory] = useState<string[]>([])
+
+  const t = useMemo(() => useTranslations(lang as language), [])
 
   function onOpenChange(open: boolean) {
     if (open) {
@@ -27,12 +37,12 @@ function History({ children }: { children: React.ReactNode }) {
 
   function onConfirm() {
     $history.set([])
-    toast.success("已清空所有历史纪录")
+    toast.success(t("clearHistoryTip"))
   }
 
   function onSwitch(value: string) {
     updateAddress(value)
-    toast.success("已切换至新地址 " + value)
+    toast.success(t("changeNew") + " " + value)
   }
 
   return (
@@ -40,16 +50,16 @@ function History({ children }: { children: React.ReactNode }) {
       <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>历史记录</AlertDialogTitle>
+          <AlertDialogTitle>{t("history")}</AlertDialogTitle>
           <AlertDialogDescription>
-            共{history.length}条历史记录
+            {fmtString(t("historyTotal"), history.length)}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <div className="flex max-h-96 flex-col gap-2 overflow-y-auto">
           {history.length == 0 && (
             <div className="bg-secondary text-muted-foreground flex items-center gap-1 rounded-sm px-3 py-2">
               <Frown size={20} />
-              这里什么也没有
+              {t("nothing")}
             </div>
           )}
           {history.map((v) => (
@@ -68,7 +78,7 @@ function History({ children }: { children: React.ReactNode }) {
                 {v}
                 <div className="flex-1" />
                 <div className="invisible flex items-center gap-2 group-hover:visible">
-                  <span className="text-sm">点击切换</span>
+                  <span className="text-sm">{t("switchHistory")}</span>
                   <CircleArrowRight strokeWidth={1.8} size={18} />
                 </div>
               </div>
@@ -76,11 +86,11 @@ function History({ children }: { children: React.ReactNode }) {
           ))}
         </div>
         <AlertDialogFooter>
-          <AlertDialogCancel>取消</AlertDialogCancel>
+          <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
           {history.length > 0 && (
             <AlertDialogPrimitive.Action asChild>
               <Button variant="destructive" onClick={onConfirm}>
-                清空历史
+                {t("clearHistory")}
               </Button>
             </AlertDialogPrimitive.Action>
           )}

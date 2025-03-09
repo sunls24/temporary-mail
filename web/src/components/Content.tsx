@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react"
+import React, { useEffect, useMemo, useRef, useState } from "react"
 import {
   ClipboardCopy,
   ExternalLink,
@@ -16,14 +16,17 @@ import { ABORT_SAFE } from "@/lib/constant.ts"
 import Mounted from "@/components/Mounted.tsx"
 import { Skeleton } from "@/components/ui/skeleton.tsx"
 import Detail from "@/components/Detail.tsx"
+import { type language, useTranslations } from "@/i18n/ui.ts"
 
-function Content() {
+function Content({ lang }: { lang: string }) {
   const [latestId, setLatestId] = useState(-1)
   const [loading, setLoading] = useState(true)
   const [envelopes, setEnvelopes] = useState<Envelope[]>([])
   const controller = useRef<AbortController>(null)
 
   const address = useStore($address)
+
+  const t = useMemo(() => useTranslations(lang as language), [])
 
   useEffect(() => {
     fetch("/api/domain")
@@ -91,14 +94,14 @@ function Content() {
   function copyToClipboard() {
     navigator.clipboard
       .writeText(address)
-      .then(() => toast.success("已拷贝至剪切板 " + address))
+      .then(() => toast.success(t("copy") + " " + address))
       .catch((e) => toast.error(e.message ?? e))
   }
 
   return (
     <div className="flex w-full flex-col pb-4">
       <div className="block sm:hidden">
-        <Actions />
+        <Actions lang={lang} />
       </div>
       <div className="relative border-x">
         <div className="animate-fill absolute h-1 bg-green-400" />
@@ -116,7 +119,7 @@ function Content() {
           </div>
           <div className="flex-1" />
           <div className="text-muted-foreground hidden font-medium sm:inline">
-            实时获取邮件中
+            {t("realTime")}
           </div>
           <Loader size={20} strokeWidth={1.8} className="mx-2 animate-spin" />
         </div>
@@ -127,18 +130,18 @@ function Content() {
             {loading ? (
               <>
                 <RotateCw className="animate-spin" size={20} />
-                <span>正在获取邮件中</span>
+                <span>{t("listLoading")}</span>
               </>
             ) : (
               <>
                 <Frown size={20} />
-                <span>当前还未收到邮件</span>
+                <span>{t("listEmpty")}</span>
               </>
             )}
           </div>
         )}
         {envelopes.map((envelope) => (
-          <Detail key={envelope.id} envelope={envelope}>
+          <Detail lang={lang} key={envelope.id} envelope={envelope}>
             <div className="hover:bg-secondary group text-muted-foreground space-y-1 px-4 py-2 transition-colors hover:cursor-pointer">
               <div className="flex items-center gap-2">
                 <span className="text-foreground">{envelope.subject}</span>

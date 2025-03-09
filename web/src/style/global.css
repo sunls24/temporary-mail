@@ -142,6 +142,6 @@
   }
 
   ::-webkit-scrollbar-thumb {
-    @apply rounded-sm bg-border;
+    @apply bg-border rounded-sm;
   }
 }

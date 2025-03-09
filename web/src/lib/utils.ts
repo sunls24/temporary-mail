@@ -34,3 +34,7 @@ export function fetchError(e: any) {
   }
   toast.error(e.message ?? e)
 }
+
+export function fmtString(template: string, ...values: any[]) {
+  return template.replace(/{(\d+)}/g, (match, index) => values[index] ?? match)
+}

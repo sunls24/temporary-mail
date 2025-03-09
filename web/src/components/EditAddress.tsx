@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useMemo, useState } from "react"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -23,10 +23,19 @@ import { useStore } from "@nanostores/react"
 import { $address, $domainList, updateAddress } from "@/lib/store/store.ts"
 import { toast } from "sonner"
 import { MessageCircleWarning } from "lucide-react"
+import { type language, useTranslations } from "@/i18n/ui"
 
-function EditAddress({ children }: { children: React.ReactNode }) {
+function EditAddress({
+  children,
+  lang,
+}: {
+  children: React.ReactNode
+  lang: string
+}) {
   const [address, setAddress] = useState("")
   const domainList = useStore($domainList)
+
+  const t = useMemo(() => useTranslations(lang as language), [])
 
   function onDomainChange(value: string) {
     setAddress(`${address!.split("@")[0]}@${value}`)
@@ -51,7 +60,7 @@ function EditAddress({ children }: { children: React.ReactNode }) {
       return
     }
     updateAddress(address)
-    toast.success("已切换至新地址 " + address)
+    toast.success(t("changeNew") + " " + address)
   }
 
   return (
@@ -59,10 +68,10 @@ function EditAddress({ children }: { children: React.ReactNode }) {
       <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>编辑邮箱</AlertDialogTitle>
+          <AlertDialogTitle>{t("edit")}</AlertDialogTitle>
           <AlertDialogDescription className="flex items-center justify-center gap-1 sm:justify-start">
             <MessageCircleWarning size={20} strokeWidth={1.8} />
-            邮箱地址任何人都可以使用，请注意风险！
+            {t("editWarn")}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <div className="flex items-center justify-center sm:justify-start">
@@ -86,8 +95,10 @@ function EditAddress({ children }: { children: React.ReactNode }) {
           </Select>
         </div>
         <AlertDialogFooter>
-          <AlertDialogCancel>取消</AlertDialogCancel>
-          <AlertDialogAction onClick={onConfirm}>确认</AlertDialogAction>
+          <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
+          <AlertDialogAction onClick={onConfirm}>
+            {t("confirm")}
+          </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

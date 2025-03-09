@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react"
+import React, { useMemo, useRef, useState } from "react"
 import {
   AlertDialog,
   AlertDialogContent,
@@ -13,17 +13,22 @@ import { Minimize2, RotateCw } from "lucide-react"
 import * as AlertDialogPrimitive from "@radix-ui/react-alert-dialog"
 import { fetchError, fmtDate } from "@/lib/utils.ts"
 import { ABORT_SAFE } from "@/lib/constant.ts"
+import { type language, useTranslations } from "@/i18n/ui"
 
 function Detail({
   children,
   envelope,
+  lang,
 }: {
   children: React.ReactNode
   envelope: Envelope
+  lang: string
 }) {
   const divRef = useRef<HTMLDivElement>(null)
   const [loading, setLoading] = useState(false)
   const controller = useRef<AbortController>(null)
+
+  const t = useMemo(() => useTranslations(lang as language), [])
 
   function onOpenChange(open: boolean) {
     if (open) {
@@ -64,7 +69,7 @@ function Detail({
           {loading && (
             <div className="text-muted-foreground flex h-6.5 items-center justify-center gap-1">
               <RotateCw className="animate-spin" size={18} />
-              <span className="">加载中</span>
+              <span className="">{t("mailLoading")}</span>
             </div>
           )}
         </div>
