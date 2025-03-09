@@ -12,6 +12,7 @@ import (
 	"tmail/internal/api"
 	"tmail/internal/constant"
 	"tmail/internal/route"
+	"tmail/internal/schedule"
 	"tmail/web"
 )
 
@@ -34,6 +35,8 @@ func (app App) Run() error {
 		return err
 	}
 	defer client.Close()
+
+	schedule.New(client).Run()
 
 	e := echo.New()
 	e.Pre(i18n)
