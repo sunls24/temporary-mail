@@ -1,5 +1,5 @@
 import React from "react"
-import { GITHUB_URL } from "@/lib/constant.ts"
+import { GITHUB_URL, VERSION } from "@/lib/constant.ts"
 import { Button } from "@/components/ui/button.tsx"
 import { Github } from "lucide-react"
 
@@ -8,9 +8,10 @@ function ToGithub() {
     <Button
       onClick={() => open(GITHUB_URL)}
       variant="ghost"
-      className="gap-1 underline underline-offset-4"
+      className="gap-1 underline underline-offset-4 has-[>svg]:px-2"
     >
-      <Github /> v2.0.0
+      <Github />
+      {VERSION}
     </Button>
   )
 }

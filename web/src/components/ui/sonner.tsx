@@ -1,8 +1,10 @@
-import { useTheme } from "next-themes"
 import { Toaster as Sonner, type ToasterProps } from "sonner"
+import { useEffect, useState } from "react"
 
 const Toaster = ({ ...props }: ToasterProps) => {
-  const { theme = "system" } = useTheme()
+  const [theme, setTheme] = useState("system")
+
+  useEffect(() => setTheme(localStorage.getItem("theme") ?? theme), [])
 
   return (
     <Sonner

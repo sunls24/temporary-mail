@@ -14,7 +14,7 @@ import "@/style/global.css"
     <meta charset="UTF-8" />
     <meta name="generator" content={Astro.generator} />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-title" content="Tmail" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -51,3 +51,14 @@ import "@/style/global.css"
     height: 100%;
   }
 </style>
+
+<script is:inline>
+  const theme =
+    localStorage.getItem("theme") ??
+    (window.matchMedia("(prefers-color-scheme: dark)").matches
+      ? "dark"
+      : "light")
+  document.documentElement.classList[theme === "dark" ? "add" : "remove"](
+    "dark"
+  )
+</script>

@@ -1,0 +1,19 @@
+---
+import { Button } from "@/components/ui/button"
+import { MoonStar, Sun } from "lucide-react"
+---
+
+<Button id="themeToggle" variant="ghost" size="icon">
+  <MoonStar className="dark:hidden" />
+  <Sun className="hidden dark:block" />
+</Button>
+
+<script is:inline>
+  document.getElementById("themeToggle").addEventListener("click", () => {
+    document.documentElement.classList.toggle("dark")
+    if (typeof localStorage !== "undefined") {
+      const isDark = document.documentElement.classList.contains("dark")
+      localStorage.setItem("theme", isDark ? "dark" : "light")
+    }
+  })
+</script>
