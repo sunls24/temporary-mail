@@ -3,6 +3,7 @@ package ent
 import (
 	"context"
 	"fmt"
+	_ "github.com/lib/pq"
 	cfg "tmail/config"
 )
 

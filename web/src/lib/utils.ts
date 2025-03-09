@@ -12,7 +12,8 @@ export function fmtDate(str: string) {
 }
 
 export function fmtFrom(str: string) {
-  return str.split(" ")[0]
+  const match = str.match(/^(.+?)\s*<(.+?)>$/)
+  return match ? match[1] : str
 }
 
 function randomStr(length: number) {
