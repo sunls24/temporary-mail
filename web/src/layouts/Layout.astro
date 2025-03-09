@@ -1,6 +1,7 @@
 ---
 import { useTranslations, type language } from "@/i18n/ui"
 import { Toaster } from "@/components/ui/sonner"
+import Umami from "@/components/Umami.astro"
 
 const { lang } = Astro.props
 const t = useTranslations(lang as language)
@@ -39,6 +40,7 @@ import "@/style/global.css"
   </head>
   <body class="flex flex-col">
     <slot />
+    <Umami />
     <Toaster position="top-right" richColors={true} client:load />
   </body>
 </html>
