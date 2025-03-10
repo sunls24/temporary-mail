@@ -5,10 +5,11 @@ import (
 )
 
 type Config struct {
-	Host       string   `env:"HOST"`
-	Port       string   `env:"PORT" envDefault:"3000"`
-	DomainList []string `env:"DOMAIN_LIST"`
-	DB         Database `envPrefix:"DB_"`
+	Host         string   `env:"HOST"`
+	Port         string   `env:"PORT" envDefault:"3000"`
+	DomainList   []string `env:"DOMAIN_LIST"`
+	AdminAddress string   `env:"ADMIN_ADDRESS"`
+	DB           Database `envPrefix:"DB_"`
 }
 
 type Database struct {

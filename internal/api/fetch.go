@@ -14,11 +14,16 @@ func Fetch(ctx *Context) error {
 	if to == "" {
 		return ctx.Bad("not found to address")
 	}
-	list, err := ctx.Envelope.Query().
+	admin := to == ctx.AdminAddress
+	query := ctx.Envelope.Query().
 		Select(envelope.FieldID, envelope.FieldTo, envelope.FieldFrom, envelope.FieldSubject, envelope.FieldCreatedAt).
-		Where(envelope.To(to)).
-		Order(ent.Desc(envelope.FieldID)).
-		All(ctx.Request().Context())
+		Order(ent.Desc(envelope.FieldID))
+	if !admin {
+		query.Where(envelope.To(to))
+	} else {
+		query.Limit(100)
+	}
+	list, err := query.All(ctx.Request().Context())
 	if err != nil {
 		return err
 	}
@@ -53,21 +58,26 @@ func FetchLatest(ctx *Context) error {
 	if to == "" {
 		return ctx.Bad("not found to address")
 	}
-	idStr := ctx.QueryParam("id")
-	id, err := strconv.Atoi(idStr)
-	if err != nil {
-		return ctx.Bad("invalid id param: " + idStr)
-	}
-	one, err := ctx.Envelope.Query().
-		Select(envelope.FieldID, envelope.FieldTo, envelope.FieldFrom, envelope.FieldSubject, envelope.FieldCreatedAt).
-		Where(envelope.IDGT(id), envelope.To(to)).
-		Order(ent.Asc(envelope.FieldID)).
-		First(ctx.Request().Context())
-	if err == nil {
-		return ctx.JSON(http.StatusOK, one)
-	}
-	if !ent.IsNotFound(err) {
-		return err
+	admin := to == ctx.AdminAddress
+	if !admin {
+		idStr := ctx.QueryParam("id")
+		id, err := strconv.Atoi(idStr)
+		if err != nil {
+			return ctx.Bad("invalid id param: " + idStr)
+		}
+		one, err := ctx.Envelope.Query().
+			Select(envelope.FieldID, envelope.FieldTo, envelope.FieldFrom, envelope.FieldSubject, envelope.FieldCreatedAt).
+			Where(envelope.IDGT(id), envelope.To(to)).
+			Order(ent.Asc(envelope.FieldID)).
+			First(ctx.Request().Context())
+		if err == nil {
+			return ctx.JSON(http.StatusOK, one)
+		}
+		if !ent.IsNotFound(err) {
+			return err
+		}
+	} else {
+		to = pubsub.SubAll
 	}
 
 	ch, cancel := pubsub.Subscribe(to)

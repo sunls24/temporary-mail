@@ -149,6 +149,8 @@ function Content({ lang }: { lang: string }) {
                   size={16}
                   className="invisible group-hover:visible"
                 />
+                <div className="flex-1" />
+                {envelope.to != address && <span>{envelope.to}</span>}
               </div>
               <div className="flex justify-between text-sm">
                 <div>{fmtFrom(envelope.from)}</div>
