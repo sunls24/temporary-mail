@@ -5,6 +5,10 @@ import (
 	"tmail/ent"
 )
 
+const (
+	SubAll = "all"
+)
+
 var (
 	index       int
 	m           sync.RWMutex
@@ -41,6 +45,9 @@ func Publish(e *ent.Envelope) {
 	m.RLock()
 	defer m.RUnlock()
 	for _, sub := range subscribers[e.To] {
+		sub <- e
+	}
+	for _, sub := range subscribers[SubAll] {
 		sub <- e
 	}
 }
