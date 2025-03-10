@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/alert-dialog.tsx"
 import { $history, updateAddress } from "@/lib/store/store.ts"
 import { toast } from "sonner"
-import { CircleArrowRight, Frown, Mail } from "lucide-react"
+import { CircleArrowRight, Frown, Mail, Trash } from "lucide-react"
 import * as AlertDialogPrimitive from "@radix-ui/react-alert-dialog"
 import { Button } from "@/components/ui/button.tsx"
 import { clsx } from "clsx"
@@ -45,6 +45,12 @@ function History({
     toast.success(t("changeNew") + " " + value)
   }
 
+  function onDelete(i: number) {
+    history.splice(i, 1)
+    $history.set(history)
+    setHistory([...history])
+  }
+
   return (
     <AlertDialog onOpenChange={onOpenChange}>
       <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
@@ -62,27 +68,29 @@ function History({
               {t("nothing")}
             </div>
           )}
-          {history.map((v) => (
-            <AlertDialogPrimitive.Cancel
-              asChild
+          {history.map((v, i) => (
+            <div
+              className={clsx(
+                "flex items-center gap-1",
+                history.length >= 8 && "mr-0.5"
+              )}
               key={v}
-              onClick={() => onSwitch(v)}
             >
-              <div
-                className={clsx(
-                  "group bg-sidebar text-muted-foreground hover:text-foreground hover:bg-secondary flex items-center rounded-sm border px-3 py-2 transition-colors hover:cursor-pointer",
-                  history.length >= 8 && "mr-0.5"
-                )}
-              >
-                <Mail size={16} className="mr-2" />
-                {v}
-                <div className="flex-1" />
-                <div className="invisible flex items-center gap-2 group-hover:visible">
-                  <span className="text-sm">{t("switchHistory")}</span>
-                  <CircleArrowRight strokeWidth={1.8} size={18} />
+              <AlertDialogPrimitive.Cancel asChild onClick={() => onSwitch(v)}>
+                <div className="group bg-sidebar text-muted-foreground hover:text-foreground hover:bg-secondary flex flex-1 items-center rounded-sm border px-3 py-2 transition-colors hover:cursor-pointer">
+                  <Mail size={16} className="mr-2" />
+                  {v}
+                  <div className="flex-1" />
+                  <div className="hidden items-center gap-2 group-hover:flex">
+                    <span className="text-sm">{t("switchHistory")}</span>
+                    <CircleArrowRight strokeWidth={1.8} size={18} />
+                  </div>
                 </div>
-              </div>
-            </AlertDialogPrimitive.Cancel>
+              </AlertDialogPrimitive.Cancel>
+              <Button variant="ghost" size="icon" onClick={() => onDelete(i)}>
+                <Trash />
+              </Button>
+            </div>
           ))}
         </div>
         <AlertDialogFooter>

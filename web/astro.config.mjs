@@ -13,7 +13,7 @@ export default defineConfig({
     plugins: [tailwindcss()],
     server: {
       proxy: {
-        "/api": "https://tmail.sunls.de",
+        "/api": "https://mail.sunls.de",
         // "/api": "http://127.0.0.1:3000",
       },
     },
