@@ -13,7 +13,7 @@ export function fmtDate(str: string) {
 
 export function fmtFrom(str: string) {
   const match = str.match(/^(.+?)\s*<(.+?)>$/)
-  return match ? match[1] : str
+  return match ? match[1].replace(/^"|"$/g, "") : str
 }
 
 function randomStr(length: number) {
