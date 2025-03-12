@@ -27,7 +27,7 @@
 ### TODO: 数据库配置
 
 ### 必须
-- `DOMAIN_LIST`: 支持的域名列表，使用`,`分割，例如: `isco.eu.org|chato.eu.org`
+- `DOMAIN_LIST`: 支持的域名列表，使用`,`分割，例如: `isco.eu.org,chato.eu.org`
 
 ### 非必须
 - `HOST`: 服务监听地址，默认为`127.0.0.1`
@@ -45,7 +45,7 @@ _请修改其中的环境变量配置_
 ### Docker
 
 ```shell
-docker run --name mail -d --restart unless-stopped -e 'HOSTNAME=0.0.0.0' -e 'DOMAIN_LIST=isco.eu.org|chato.eu.org' -p 3000:3000 sunls24/tmail
+docker run --name tmail -d --restart unless-stopped -e 'HOST=0.0.0.0' -e 'DOMAIN_LIST=isco.eu.org,chato.eu.org' -p 3000:3000 sunls24/tmail
 ```
 
 ### Docker Compose & Caddy (推荐)
@@ -58,19 +58,22 @@ _如果不需要反向代理，需要设置`HOST=0.0.0.0`环境变量_
 version: "3.0"
 
 services:
-  mail:
-    container_name: mail
+  tmail:
+    container_name: tmail
     image: sunls24/tmail:latest
     network_mode: host
     restart: unless-stopped
     environment:
-      - "DOMAIN_LIST=isco.eu.org|chato.eu.org"
+      - "DOMAIN_LIST=isco.eu.org,chato.eu.org"
 ```
 
 **Caddyfile**
 
 ```text
 mail.example.com {
+    encode zstd gzip
+	@cache path /_astro/* /*.webp /favicon.svg
+	header @cache Cache-Control "public, max-age=31536000, immutable"
     reverse_proxy 127.0.0.1:3000
 }
 ```
