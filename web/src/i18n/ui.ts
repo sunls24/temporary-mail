@@ -8,9 +8,9 @@ export function useTranslations(lang: language) {
 
 const ui = {
   en: {
-    pageTitle: "Temporary Mail - Anonymous Disposable Email",
+    pageTitle: "Temporary Mail - Anonymous Disposable mailbox",
     pageDesc:
-      "Temporary Mail - An anonymous disposable email, protecting your personal email address from spam.",
+      "Temporary Mail - An anonymous, disposable mailbox, protecting your personal email address from spam. It supports multiple domain suffixes, allows customizable email addresses, requires no sign-up, and is ready to use immediately. 🌟",
     title: "Temporary Mail",
     copy: "Copied to clipboard",
     edit: "Edit Address",
@@ -34,7 +34,7 @@ const ui = {
   zh: {
     pageTitle: "临时邮箱 - 匿名的一次性邮箱",
     pageDesc:
-      "临时邮箱 - 匿名的一次性邮箱，保护您的个人电子邮件地址免受垃圾邮件的骚扰。",
+      "临时邮箱 - 匿名的一次性邮箱，保护您的个人电子邮件地址免受垃圾邮件的骚扰。支持多个域名后缀，可自定义邮件地址，无需登录，打开即用 🌟",
     title: "临时邮箱",
     copy: "已拷贝至剪切板",
     edit: "编辑邮箱",
